@@ -1,22 +1,30 @@
 # PDX Local AI
 
-PDX Local AI lets an AI assistant search the documents you choose on your
-Windows PC and cite the passages it finds. It builds a local index of those
-folders and gives MCP clients such as Cursor, Claude, Codex and Antigravity
-a shared way to search it.
+PDX Local AI gives your AI assistant three capabilities on your Windows PC:
+**tasks, documents, and memory**. Connect it over MCP from an assistant such
+as Cursor, Claude, Codex, or Antigravity.
 
-For example, add a folder of meeting notes and ask your assistant, "What did
-we agree to ship first?" The assistant can search the indexed notes and
-refer to the matching passage and its source. The same workflow works for
-finding a clause in a project document or locating a decision in a handoff
-note.
+- **Tasks.** Run a structured job with human approval, bounded steps, and
+  reviewable results. For example, ask your assistant to check a project
+  handoff against a checklist. The assistant proposes the task, waits for
+  your approval, and submits its findings for verification and review.
+- **Documents.** Index folders you select, search their contents, and retrieve
+  matching passages with source citations. For example, ask which decision
+  was recorded in your meeting notes and follow the citation back to the
+  original passage.
+- **Memory.** Keep working notes and reuse approved, published memory in later
+  tasks. For example, an evidence-backed handoff note can be proposed for
+  durable memory. After human approval and publication, a later task can
+  recall the note through its memory tool. Proposals stay out of published
+  recall until they are published.
 
-PDX Local AI runs on your PC and serves the document results over local
-stdio MCP. Your connected assistant handles the conversation and may send
-retrieved excerpts to its model provider. Choose source folders accordingly.
+PDX Local AI stores its index, task state, and memory locally. Your connected
+assistant handles the conversation and may send retrieved content to its model
+provider. Choose the folders and content you share with that in mind.
 
-To get started, install the Windows ZIP, add and scan a document folder,
-then connect your assistant using the [Agent onboarding guide](docs/AGENT_ONBOARDING.md).
+Install the Windows package and follow [Agent onboarding](docs/AGENT_ONBOARDING.md).
+See the [task operations guide](docs/TASK_HARNESS_OPERATIONS.md) for approval,
+review, and memory workflows.
 
 ## Download v0.0.1
 
