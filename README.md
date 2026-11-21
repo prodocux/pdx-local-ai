@@ -1,8 +1,17 @@
 # PDX Local AI
 
-## Candidate scope
+## Download v0.0.1
 
-This Windows x64 candidate runs locally for one Windows user. It covers local
+[Download PDX Local AI for Windows x64](https://github.com/prodocux/pdx-local-ai/releases/download/v0.0.1/pdx-local-ai-windows-x64-v0.0.1.zip).
+
+Review the bundled runtime terms and third-party notices before accepting them
+in the installer or portable EXE.
+
+ZIP SHA-256: `eb206a6fc39d92cb1d487e8c31e27bbcf275bfd85de8bf6eed40ad346acb6954`.
+
+## Release scope
+
+This Windows x64 release runs locally for one Windows user. It covers local
 document indexing and search, citations, stdio MCP access, and the local task
 and memory workflows described in [Agent onboarding](docs/AGENT_ONBOARDING.md).
 Linux and macOS deployments, hosted HTTP access, and multi-tenant web hosting
@@ -10,10 +19,10 @@ are outside the supported scope of this delivery.
 
 Workspace-level canonical knowledge (L3), semantic retrieval escalation,
 document expansion and reranking, and long-text continuation are outside this
-candidate's supported feature set. Runtime modules, schemas, and policy files
+release's supported feature set. Runtime modules, schemas, and policy files
 may be present for compatibility or staged development.
 The Farpals adapter is present in the source, but the local MCP service does
-not enable it. The candidate supports the standalone workflow.
+not enable it. The release supports the standalone workflow.
 
 ## Windows bundled runtime terms
 
@@ -45,9 +54,9 @@ The three-job workflow tests source, builds a new CI candidate, then validates
 that exact ZIP by SHA-256. The delivery probe installs to an isolated directory
 and calls the installed EXE, not source code. It verifies MCP search content,
 citation/receipt, EOF shutdown, and uninstall retaining profile data.
-Python drives the test harness; hosted Windows CI does NOT close the clean-OS
-RG-1 release gate. Native dependency provenance/license review RG-2 also remains
-open. Each CI run builds a new candidate.
+Hosted CI builds and tests a separate package. The published Windows ZIP
+passed the clean Windows and runtime distribution reviews for the SHA-256
+listed above.
 
 The delivery gate uses the source tests above, the compiled runtime checks,
 the installed-EXE probe, and the package acceptance suite against the exact
