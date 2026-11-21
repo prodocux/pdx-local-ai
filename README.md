@@ -1,5 +1,23 @@
 # PDX Local AI
 
+PDX Local AI lets an AI assistant search the documents you choose on your
+Windows PC and cite the passages it finds. It builds a local index of those
+folders and gives MCP clients such as Cursor, Claude, Codex and Antigravity
+a shared way to search it.
+
+For example, add a folder of meeting notes and ask your assistant, "What did
+we agree to ship first?" The assistant can search the indexed notes and
+refer to the matching passage and its source. The same workflow works for
+finding a clause in a project document or locating a decision in a handoff
+note.
+
+PDX Local AI runs on your PC and serves the document results over local
+stdio MCP. Your connected assistant handles the conversation and may send
+retrieved excerpts to its model provider. Choose source folders accordingly.
+
+To get started, install the Windows ZIP, add and scan a document folder,
+then connect your assistant using the [Agent onboarding guide](docs/AGENT_ONBOARDING.md).
+
 ## Download v0.0.1
 
 [Download PDX Local AI for Windows x64](https://github.com/prodocux/pdx-local-ai/releases/download/v0.0.1/pdx-local-ai-windows-x64-v0.0.1.zip).
