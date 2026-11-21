@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.prodocux.local/pdx-local-ai/pdx_local_source_version_v1.schema.json",
+  "title": "PDX Local AI source version v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "workspace_id", "source_root_id", "file_record_id", "source_version_id", "source_sha256", "size_bytes", "processing_status", "coverage_disposition", "unknown_remainder"],
+  "properties": {
+    "schema_version": {"const": "pdx_local_source_version_v1"},
+    "workspace_id": {"type": "string", "format": "uuid"},
+    "source_root_id": {"type": "string", "format": "uuid"},
+    "file_record_id": {"type": "string", "format": "uuid"},
+    "source_version_id": {"type": "string", "format": "uuid"},
+    "source_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "size_bytes": {"type": "integer", "minimum": 0},
+    "observed_mtime_ns": {"type": "integer", "minimum": 0},
+    "volume_identity": {"type": ["string", "null"]},
+    "file_identity": {"type": ["string", "null"]},
+    "processing_status": {"enum": ["indexed", "unsupported", "failed"]},
+    "coverage_disposition": {"enum": ["complete", "partial_known", "partial_unknown", "not_evaluated"]},
+    "unknown_remainder": {"type": "boolean"},
+    "truncation_reason_codes": {"type": "array", "items": {"type": "string", "pattern": "^[A-Z0-9_]+$"}, "uniqueItems": true},
+    "observed_limits": {"type": "object", "additionalProperties": {"type": ["integer", "string", "boolean", "null"]}},
+    "processed_counts": {"$ref": "#/$defs/counts"},
+    "known_total_counts": {"$ref": "#/$defs/counts"},
+    "parser_warnings": {"type": "array", "items": {"type": "string"}},
+    "ocr_disposition": {"enum": ["not_needed", "required", "not_evaluated", "unavailable"]}
+  },
+  "allOf": [
+    {"if": {"properties": {"processing_status": {"const": "indexed"}}}, "then": {"properties": {"coverage_disposition": {"enum": ["complete", "partial_known", "partial_unknown"]}}}},
+    {"if": {"properties": {"processing_status": {"const": "unsupported"}}}, "then": {"properties": {"coverage_disposition": {"const": "not_evaluated"}}}},
+    {"if": {"properties": {"processing_status": {"const": "failed"}}}, "then": {"properties": {"coverage_disposition": {"const": "not_evaluated"}}}},
+    {"if": {"properties": {"coverage_disposition": {"enum": ["complete", "partial_known"]}}}, "then": {"properties": {"unknown_remainder": {"const": false}}}},
+    {"if": {"properties": {"unknown_remainder": {"const": true}}}, "then": {"properties": {"coverage_disposition": {"const": "partial_unknown"}}}},
+    {"if": {"properties": {"coverage_disposition": {"const": "partial_unknown"}}}, "then": {"properties": {"unknown_remainder": {"const": true}}}}
+  ],
+  "$defs": {
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "pages": {"type": ["integer", "null"], "minimum": 0},
+        "blocks": {"type": ["integer", "null"], "minimum": 0},
+        "rows": {"type": ["integer", "null"], "minimum": 0},
+        "text_bytes": {"type": ["integer", "null"], "minimum": 0}
+      }
+    }
+  }
+}

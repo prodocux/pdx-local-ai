@@ -1,0 +1,24 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://prodocux.dev/schemas/local-ai/pdx_local_canonical_withdrawal_receipt_v1.schema.json",
+  "title":"Gate 4B-2 canonical withdrawal receipt v1",
+  "type":"object","additionalProperties":false,
+  "required":["schema_version","withdrawal_receipt_id","withdrawal_request_id","workspace_id","canonical_knowledge_id","canonical_namespace","workspace_authority_id","terminal_result","status_before","status_after","current_version_id_before","current_version_id_after","workspace_reviewer_grant_id","workspace_reviewer_grant_sha256","identity_snapshot_sha256","mutation_applied","idempotency_key","created_at"],
+  "properties":{
+    "schema_version":{"const":"pdx_local_canonical_withdrawal_receipt_v1"},
+    "withdrawal_receipt_id":{"type":"string","format":"uuid"},"withdrawal_request_id":{"type":"string","format":"uuid"},
+    "workspace_id":{"type":"string","format":"uuid"},"canonical_knowledge_id":{"type":"string","format":"uuid"},
+    "canonical_namespace":{"type":"string","minLength":1},"workspace_authority_id":{"type":"string","minLength":1},
+    "terminal_result":{"enum":["withdrawn","stale","rejected"]},"status_before":{"const":"active"},
+    "status_after":{"enum":["active","withdrawn"]},"current_version_id_before":{"type":"string","format":"uuid"},
+    "current_version_id_after":{"type":["string","null"],"format":"uuid"},
+    "workspace_reviewer_grant_id":{"type":"string","format":"uuid"},"workspace_reviewer_grant_sha256":{"$ref":"#/$defs/digest"},
+    "identity_snapshot_sha256":{"$ref":"#/$defs/digest"},"mutation_applied":{"type":"boolean"},
+    "idempotency_key":{"type":"string","minLength":16,"maxLength":200},"created_at":{"type":"string","format":"date-time"}
+  },
+  "allOf":[
+    {"if":{"properties":{"terminal_result":{"const":"withdrawn"}}},"then":{"properties":{"status_after":{"const":"withdrawn"},"current_version_id_after":{"type":"null"},"mutation_applied":{"const":true}}}},
+    {"if":{"properties":{"terminal_result":{"enum":["stale","rejected"]}}},"then":{"properties":{"status_after":{"const":"active"},"current_version_id_after":{"type":"string","format":"uuid"},"mutation_applied":{"const":false}}}}
+  ],
+  "$defs":{"digest":{"type":"string","pattern":"^[a-f0-9]{64}$"}}
+}

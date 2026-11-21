@@ -1,0 +1,452 @@
+{
+  "recorded_at": "2026-11-18",
+  "index": "https://pypi.org/simple",
+  "stage": "p4",
+  "distributions": [
+    {
+      "project": "prodocux",
+      "version": "0.3.0rc13",
+      "filename": "prodocux-0.3.0rc13-py3-none-any.whl",
+      "project_release_url": "https://pypi.org/project/prodocux/0.3.0rc13/#files",
+      "sha256": "900e88664917384d856ab368321cd3b274431aba4acb377c7d3db8c186d4454e",
+      "size_bytes": 289336
+    },
+    {
+      "project": "pdx-artifact-engine",
+      "version": "0.3.0a13",
+      "filename": "pdx_artifact_engine-0.3.0a13-py3-none-any.whl",
+      "project_release_url": "https://pypi.org/project/pdx-artifact-engine/0.3.0a13/#files",
+      "sha256": "87439f372921cdd42db99778248987d9e5ab3c5fc3512f8ca50be9008b7b9f7e",
+      "size_bytes": 240609
+    }
+  ],
+  "locked_dependencies": [
+    {
+      "requirement": "rfc8785==0.1.4 --hash=sha256:520d690b448ecf0703691c76e1a34a24ddcd4fc5bc41d589cb7c58ec651bcd48"
+    }
+  ],
+  "imports": [
+    {
+      "module": "api.main",
+      "names": [
+        "projection_capabilities"
+      ]
+    },
+    {
+      "module": "pdx_adapter_prodocux.verified_projection",
+      "names": [
+        "validate_kernel_projection"
+      ]
+    },
+    {
+      "module": "pdx_artifact_core",
+      "names": [
+        "create_continuable_extraction",
+        "create_provenance_bundle"
+      ]
+    },
+    {
+      "module": "pdx_artifact_engine",
+      "names": [
+        "ArtifactRuntime"
+      ]
+    },
+    {
+      "module": "pdx_artifact_engine.continuable_extraction",
+      "names": [
+        "ContinuableExtractionService",
+        "ContinuableExtractionStore"
+      ]
+    },
+    {
+      "module": "pdx_artifact_engine.contracts.external_operations",
+      "names": [
+        "validation"
+      ]
+    },
+    {
+      "module": "pdx_artifact_engine.dynamic_dispatch",
+      "names": [
+        "DispatchTool",
+        "DispatchToolRegistry",
+        "DynamicDispatchService"
+      ]
+    },
+    {
+      "module": "pdx_artifact_engine.external_operations",
+      "names": [
+        "ExternalOperationService",
+        "Principal",
+        "ProviderAdapter"
+      ]
+    },
+    {
+      "module": "pdx_artifact_engine.registry",
+      "names": [
+        "SkillDefinition",
+        "SkillRegistry"
+      ]
+    },
+    {
+      "module": "pdx_artifact_engine.runtime_workflows",
+      "names": [
+        "RuntimeWorkflowService",
+        "RuntimeWorkflowStore"
+      ]
+    },
+    {
+      "module": "prodocux_kernel",
+      "names": [
+        "__version__"
+      ]
+    },
+    {
+      "module": "prodocux_kernel.archive_intake.authority",
+      "names": [
+        "Identity"
+      ]
+    },
+    {
+      "module": "prodocux_kernel.archive_intake.contracts",
+      "names": [
+        "digest"
+      ]
+    },
+    {
+      "module": "prodocux_kernel.archive_intake.decoders",
+      "names": [
+        "ArchiveError"
+      ]
+    },
+    {
+      "module": "prodocux_kernel.archive_intake.negotiation",
+      "names": [
+        "Negotiation"
+      ]
+    },
+    {
+      "module": "prodocux_kernel.archive_intake.sources",
+      "names": [
+        "ArchiveSources",
+        "scope"
+      ]
+    },
+    {
+      "module": "prodocux_kernel.intake",
+      "names": [
+        "extract_csv_continuable_projection",
+        "extract_pdf_continuable_projection",
+        "extract_pptx_continuable_projection",
+        "extract_xlsx_continuable_projection"
+      ]
+    },
+    {
+      "module": "prodocux_kernel.intake.documents",
+      "names": [
+        "read_document",
+        "resolve_document"
+      ]
+    },
+    {
+      "module": "prodocux_kernel.intake.docx",
+      "names": [
+        "profile_docx_bytes"
+      ]
+    },
+    {
+      "module": "prodocux_kernel.intake.pdf_projection",
+      "names": [
+        "extract_pdf_continuable_projection"
+      ]
+    },
+    {
+      "module": "prodocux_kernel.rendering.derived_store",
+      "names": [
+        "DerivedArtifactStore"
+      ]
+    },
+    {
+      "module": "prodocux_kernel.rendering.service",
+      "names": [
+        "execute_continuable_projection"
+      ]
+    }
+  ],
+  "endpoints": {
+    "kernel_http_archive": "not_used",
+    "in_process_imports": [
+      {
+        "module": "api.main",
+        "names": [
+          "projection_capabilities"
+        ]
+      },
+      {
+        "module": "pdx_adapter_prodocux.verified_projection",
+        "names": [
+          "validate_kernel_projection"
+        ]
+      },
+      {
+        "module": "pdx_artifact_core",
+        "names": [
+          "create_continuable_extraction",
+          "create_provenance_bundle"
+        ]
+      },
+      {
+        "module": "pdx_artifact_engine",
+        "names": [
+          "ArtifactRuntime"
+        ]
+      },
+      {
+        "module": "pdx_artifact_engine.continuable_extraction",
+        "names": [
+          "ContinuableExtractionService",
+          "ContinuableExtractionStore"
+        ]
+      },
+      {
+        "module": "pdx_artifact_engine.contracts.external_operations",
+        "names": [
+          "validation"
+        ]
+      },
+      {
+        "module": "pdx_artifact_engine.dynamic_dispatch",
+        "names": [
+          "DispatchTool",
+          "DispatchToolRegistry",
+          "DynamicDispatchService"
+        ]
+      },
+      {
+        "module": "pdx_artifact_engine.external_operations",
+        "names": [
+          "ExternalOperationService",
+          "Principal",
+          "ProviderAdapter"
+        ]
+      },
+      {
+        "module": "pdx_artifact_engine.registry",
+        "names": [
+          "SkillDefinition",
+          "SkillRegistry"
+        ]
+      },
+      {
+        "module": "pdx_artifact_engine.runtime_workflows",
+        "names": [
+          "RuntimeWorkflowService",
+          "RuntimeWorkflowStore"
+        ]
+      },
+      {
+        "module": "prodocux_kernel",
+        "names": [
+          "__version__"
+        ]
+      },
+      {
+        "module": "prodocux_kernel.archive_intake.authority",
+        "names": [
+          "Identity"
+        ]
+      },
+      {
+        "module": "prodocux_kernel.archive_intake.contracts",
+        "names": [
+          "digest"
+        ]
+      },
+      {
+        "module": "prodocux_kernel.archive_intake.decoders",
+        "names": [
+          "ArchiveError"
+        ]
+      },
+      {
+        "module": "prodocux_kernel.archive_intake.negotiation",
+        "names": [
+          "Negotiation"
+        ]
+      },
+      {
+        "module": "prodocux_kernel.archive_intake.sources",
+        "names": [
+          "ArchiveSources",
+          "scope"
+        ]
+      },
+      {
+        "module": "prodocux_kernel.intake",
+        "names": [
+          "extract_csv_continuable_projection",
+          "extract_pdf_continuable_projection",
+          "extract_pptx_continuable_projection",
+          "extract_xlsx_continuable_projection"
+        ]
+      },
+      {
+        "module": "prodocux_kernel.intake.documents",
+        "names": [
+          "read_document",
+          "resolve_document"
+        ]
+      },
+      {
+        "module": "prodocux_kernel.intake.docx",
+        "names": [
+          "profile_docx_bytes"
+        ]
+      },
+      {
+        "module": "prodocux_kernel.intake.pdf_projection",
+        "names": [
+          "extract_pdf_continuable_projection"
+        ]
+      },
+      {
+        "module": "prodocux_kernel.rendering.derived_store",
+        "names": [
+          "DerivedArtifactStore"
+        ]
+      },
+      {
+        "module": "prodocux_kernel.rendering.service",
+        "names": [
+          "execute_continuable_projection"
+        ]
+      }
+    ]
+  },
+  "profiles": {
+    "default_catalog_scan": [
+      ".docx",
+      ".pdf"
+    ],
+    "archive_adoption": "source_root_opt_in",
+    "installed_archive_profiles": [
+      {
+        "profile_id": "zip-store-deflate",
+        "release_target": "rc13_required_target",
+        "adopted": true
+      },
+      {
+        "profile_id": "zip64-store-deflate",
+        "release_target": "rc13_required_target",
+        "adopted": true
+      },
+      {
+        "profile_id": "tar-ustar-pax-gnu",
+        "release_target": "rc13_required_target",
+        "adopted": true
+      },
+      {
+        "profile_id": "gzip-single-member",
+        "release_target": "rc13_required_target",
+        "adopted": true
+      },
+      {
+        "profile_id": "bzip2-single-stream",
+        "release_target": "rc13_required_target",
+        "adopted": true
+      },
+      {
+        "profile_id": "xz-single-stream",
+        "release_target": "rc13_required_target",
+        "adopted": true
+      },
+      {
+        "profile_id": "tar-gzip",
+        "release_target": "rc13_required_target",
+        "adopted": true
+      },
+      {
+        "profile_id": "tar-bzip2",
+        "release_target": "rc13_required_target",
+        "adopted": true
+      },
+      {
+        "profile_id": "tar-xz",
+        "release_target": "rc13_required_target",
+        "adopted": true
+      },
+      {
+        "profile_id": "nested-qualified-profiles",
+        "release_target": "rc13_required_target",
+        "adopted": true
+      },
+      {
+        "profile_id": "document-leaf-handoff",
+        "release_target": "rc13_required_target",
+        "adopted": true
+      },
+      {
+        "profile_id": "native-7z-copy-lzma-lzma2",
+        "release_target": "rc13_conditional_native_target",
+        "adopted": false
+      },
+      {
+        "profile_id": "native-rar3-rar4",
+        "release_target": "rc13_conditional_native_target",
+        "adopted": false
+      },
+      {
+        "profile_id": "native-rar5",
+        "release_target": "rc13_conditional_native_target",
+        "adopted": false
+      }
+    ]
+  },
+  "schema_digests": {
+    "schemas/pdx_local_block_instance_v1.schema.json": "02c42eec80876cf95ddc1f9f3e2e4b0c0d7919f8b0e5f93094515d55d0aa4f13",
+    "schemas/pdx_local_canonical_knowledge_v1.schema.json": "1acfd3bcb731b6f231232333c8fa1e512f5f8f65c5c7b0d70fc28866d72c4276",
+    "schemas/pdx_local_canonical_knowledge_version_v1.schema.json": "018a1b2caf51704b0195d830413f9aced146c4a8a8bdad91e371acfa8aa22d81",
+    "schemas/pdx_local_canonical_withdrawal_receipt_v1.schema.json": "905884ce989a484e19657d87af20067e14e038aa8369927a374f56d27a6646bc",
+    "schemas/pdx_local_canonical_withdrawal_request_v1.schema.json": "3a1c5610b4965413232935eb91279d63077b909cebd4c1fbeb4165d9a47779ef",
+    "schemas/pdx_local_citation_v1.schema.json": "8decb6b471c89bd738b612b23882a277fd5942e24b8f1e1e5ac5cd0ff4dd7ff9",
+    "schemas/pdx_local_consolidation_record_v1.schema.json": "e204437bed7790afc25d008a19c75cbb0467cb31490bac1bb1dab3d18226583f",
+    "schemas/pdx_local_document_projection_v1.schema.json": "3701893ea59f8a92e7c4f5b1b9b5d3cef428591b2a4145fed80c9c85d9531d7c",
+    "schemas/pdx_local_durable_promotion_proposal_v1.schema.json": "0b641e5d088374085180b25022ba28346fcf9576dfd682bba07ed382af221009",
+    "schemas/pdx_local_durable_promotion_request_v1.schema.json": "874739e6faa3dc3b3373bd911bdf78285e346b22f09f1274bce6c75a8becca3a",
+    "schemas/pdx_local_durable_publication_receipt_v1.schema.json": "471472a371bcf99697f6c1224bc627afd4d5bed181e9e7a71dcbefe57de02b48",
+    "schemas/pdx_local_durable_publication_receipt_v2.schema.json": "992192e7ea7606a75105bc976e762c24e3fd34e755b4649ce91a1d6f45468533",
+    "schemas/pdx_local_durable_publication_request_v1.schema.json": "932ecd2f36ce24e972fd97bc40c6b2d537a661d3d7893c126e448b55b1fe3548",
+    "schemas/pdx_local_file_record_v1.schema.json": "93a55a0847e333f7ed1566c1118e3bdd8e8b0f4452feb185b4c6985093249895",
+    "schemas/pdx_local_governed_recall_receipt_v1.schema.json": "95727a6824b147213209cfb62aab19eed6920062ac3ab6413b73995d4661653d",
+    "schemas/pdx_local_governed_recall_receipt_v2.schema.json": "0896c3e2c857975a45847a83ba2ed899a1960fbfbcec96b7642ee547ab02bc8e",
+    "schemas/pdx_local_hybrid_retrieval_receipt_v1.schema.json": "75258dd0a84562559eba0e0620dbd75470d785a9f12b840e3c1d1d44a960a52a",
+    "schemas/pdx_local_index_attempt_v1.schema.json": "481870b9031b35bbf3df9ea1a3db0f69201ad8b66de73061a6f2eb1daf273cde",
+    "schemas/pdx_local_l3_target_binding_v1.schema.json": "ca624ba9d20c05b39c1b9d9f3d9b8e84280a0080068c0ec1f4f7fcab352148ad",
+    "schemas/pdx_local_layered_recall_receipt_v1.schema.json": "53812699baead957376da00c6f2447bd17e90fb28276e332eb866b91150881c3",
+    "schemas/pdx_local_memory_conflict_v1.schema.json": "73e68af2ca2efd55c01e1aa9ae9b4508120cb5a2528bbcfe76b73cc16344f51c",
+    "schemas/pdx_local_memory_promotion_receipt_v1.schema.json": "c667c143ce72b5594762b15f82d2f7f35f5112bf2658b76086a71657cb6d8299",
+    "schemas/pdx_local_memory_promotion_request_v1.schema.json": "c888693739d6b1787740e10e98b04df3087de2f497c8940e7b17e6c8cad3715a",
+    "schemas/pdx_local_memory_recall_receipt_v1.schema.json": "69565317db3c15cc37f481bb876fce4d7bad2b69918a4622e7d8488db21cd4ea",
+    "schemas/pdx_local_memory_record_v1.schema.json": "cf7c2dc72d29a52df0ea7e8be0d18eac8c592849b227bb7ddaaff3ec4c9d1946",
+    "schemas/pdx_local_memory_record_v2.schema.json": "b088c8bf17bcd6b86e81a323945cda9d52084513aeab57599e1686b111e806bc",
+    "schemas/pdx_local_memory_source_binding_v1.schema.json": "4f83b000130d0565fcb0cfe227871e1403f903f976048d8d5f3d19229c0e6bcd",
+    "schemas/pdx_local_promotion_decision_v1.schema.json": "c5f4efc56e63ff9cf798e9a113e56a67466df0b6e7a35713676e708b122e920a",
+    "schemas/pdx_local_reconciliation_receipt_v1.schema.json": "bafb921317de0e18d6f640797ab48bf98eaf6ecfcc9602fd0cdbcbb9f5e8045d",
+    "schemas/pdx_local_retrieval_escalation_request_v1.schema.json": "3f529b1a2cf7505e5b30bef2b5803243feb2590e60f448fc884fa021aadb4605",
+    "schemas/pdx_local_retrieval_orchestration_receipt_v1.schema.json": "b4c84fc31bf129cf8019775bf71780878f67b5f869981c43ef2bcbc8eadd503a",
+    "schemas/pdx_local_retrieval_receipt_v1.schema.json": "fcc636f7a5a1012537f93bb9680f4e2926f91122bf751c19a0d5db0e0d03ae04",
+    "schemas/pdx_local_retrieval_request_v1.schema.json": "0aeff5293b590dc7d021705e95f9679644a68af7ba2656a0a8b3fd5e7979ce69",
+    "schemas/pdx_local_retrieval_stage_receipt_v1.schema.json": "15b2ff2240fa2ffffb2618962ab86df10f042855d172e7d5107ba4a500149fa6",
+    "schemas/pdx_local_secret_denylist_audit_v1.schema.json": "f250340876f5a815feb4f2b79817e8b46b7ddc3ffcae7ca5a75743b4fd5db725",
+    "schemas/pdx_local_session_memory_item_v1.schema.json": "5aba19f77d09fecfb79c4b3fd7e4cb7c24869478e9d3501b6932720653dcf998",
+    "schemas/pdx_local_source_root_v1.schema.json": "24589630963238c3669c62fcc48e00cf49b213abe493af20e5b18694fc24e0a5",
+    "schemas/pdx_local_source_version_v1.schema.json": "0c184a6ab4fdb1494fed3ffd54417560e75389b459a3c6d14880b77b23f660df",
+    "schemas/pdx_local_text_citation_v1.schema.json": "6c1d057b027fe8749d7ff057f26427d07cb3ea7671fca7d117712240917f51e6",
+    "schemas/pdx_local_text_coverage_disclosure_v1.schema.json": "6d176fae27bb41d2898f31514a0c3e5b432abf3b66f06fb4b393b3a66d8501d0",
+    "schemas/pdx_local_text_projection_v1.schema.json": "8fdb7f0dcdc10afb53f1def3f8c2029ac853804ca502c6733ad8cc14997f8cac",
+    "schemas/pdx_local_text_source_range_v1.schema.json": "c08b078304699c8a03eee814f602b048d8cf00218f6759c651578514e4165535",
+    "schemas/pdx_local_working_memory_v1.schema.json": "3a33108346f6dc5bc6a14a9526c6da249298d7656278a4abe71af32014194517",
+    "schemas/pdx_local_workspace_reviewer_grant_v1.schema.json": "c92f84a03641c5027dca17454191f7bfb1b16ae6bb958f8565ed197e43a48808"
+  },
+  "policy_sha256": "45b77180b7a107ab073f664150c89993be693557c641399ce52964701f5a53e7",
+  "note": "P4 consumer surface. Wheel filename, size, and hash come from the published distributions named in versions.py. Catalog scan adopts .docx and .pdf by default. Archive profiles are adopted only after a source root sets archive_enabled. source_replay.resolve returns {quote, verifier_source}. Local candidate seals stay on ArtifactRuntime. External sends use one external operation per subject and do not claim exactly-once delivery. Vector escalation keeps the lexical insufficiency on the stage receipt and the policy outcome on the terminal receipt. Rerank and document expansion stay unauthorized. This file does not authorize public export."
+}

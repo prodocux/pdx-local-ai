@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://prodocux.dev/schemas/local-ai/pdx_local_text_citation_v1.schema.json",
+  "title": "PDX Local AI text citation v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "citation_id",
+    "workspace_id",
+    "source_root_id",
+    "file_record_id",
+    "source_version_id",
+    "source_sha256",
+    "projection_id",
+    "parser_contract",
+    "block_instance_id",
+    "locator",
+    "quote_start",
+    "quote_end",
+    "quote_normalization",
+    "quoted_text_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "pdx_local_text_citation_v1"},
+    "citation_id": {"type": "string", "format": "uuid"},
+    "workspace_id": {"type": "string", "format": "uuid"},
+    "source_root_id": {"type": "string", "format": "uuid"},
+    "file_record_id": {"type": "string", "format": "uuid"},
+    "source_version_id": {"type": "string", "format": "uuid"},
+    "source_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "projection_id": {"type": "string", "format": "uuid"},
+    "parser_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": {
+        "name": {"const": "pdx_local_text_decoder"},
+        "version": {"const": "1"}
+      }
+    },
+    "block_instance_id": {"type": "string", "format": "uuid"},
+    "locator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "line_start",
+        "line_end_exclusive",
+        "source_codepoint_start",
+        "source_codepoint_end_exclusive"
+      ],
+      "properties": {
+        "kind": {"const": "text_line_codepoint_v1"},
+        "line_start": {"type": "integer", "minimum": 1},
+        "line_end_exclusive": {"type": "integer", "minimum": 2},
+        "source_codepoint_start": {"type": "integer", "minimum": 0},
+        "source_codepoint_end_exclusive": {"type": "integer", "minimum": 0}
+      }
+    },
+    "quote_start": {"const": 0},
+    "quote_end": {"type": "integer", "minimum": 1},
+    "quote_normalization": {"const": "unicode_nfc_codepoint_v1"},
+    "quoted_text_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

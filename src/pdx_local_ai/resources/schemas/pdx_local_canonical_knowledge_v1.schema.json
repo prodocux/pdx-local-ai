@@ -1,0 +1,6 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://prodocux.dev/schemas/local-ai/pdx_local_canonical_knowledge_v1.schema.json","title":"Proposed canonical knowledge identity v1","type":"object","additionalProperties":false,
+  "required":["schema_version","canonical_knowledge_id","workspace_id","canonical_namespace","subject_key","current_version_id","status","created_at","updated_at"],
+  "properties":{"schema_version":{"const":"pdx_local_canonical_knowledge_v1"},"canonical_knowledge_id":{"type":"string","format":"uuid"},"workspace_id":{"type":"string","format":"uuid"},"canonical_namespace":{"type":"string","minLength":1},"subject_key":{"type":"string","minLength":1},"current_version_id":{"type":["string","null"],"format":"uuid"},"status":{"enum":["active","withdrawn"]},"created_at":{"type":"string","format":"date-time"},"updated_at":{"type":"string","format":"date-time"}},
+  "allOf":[{"if":{"properties":{"status":{"const":"active"}}},"then":{"properties":{"current_version_id":{"type":"string","format":"uuid"}}}}]
+}

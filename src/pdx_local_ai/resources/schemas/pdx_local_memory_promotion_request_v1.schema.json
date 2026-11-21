@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://prodocux.dev/schemas/local-ai/pdx_local_memory_promotion_request_v1.schema.json",
+  "title": "Proposed L0 to L1 promotion request v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "workspace_id", "principal_id", "session_item_id", "target_scope_id", "idempotency_key", "actor_id", "requested_ttl_seconds"],
+  "properties": {
+    "schema_version": {"const": "pdx_local_memory_promotion_request_v1"},
+    "workspace_id": {"type": "string", "format": "uuid"},
+    "principal_id": {"type": "string", "minLength": 1},
+    "session_item_id": {"type": "string", "format": "uuid"},
+    "target_scope_id": {"type": "string", "minLength": 1},
+    "idempotency_key": {"type": "string", "minLength": 16, "maxLength": 200},
+    "actor_id": {"type": "string", "minLength": 1},
+    "requested_ttl_seconds": {"type": "integer", "minimum": 60, "maximum": 2592000}
+  }
+}

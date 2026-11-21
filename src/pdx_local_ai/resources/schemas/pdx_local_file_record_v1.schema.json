@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.prodocux.local/pdx-local-ai/pdx_local_file_record_v1.schema.json",
+  "title": "PDX Local AI file record v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "workspace_id", "source_root_id", "file_record_id", "relative_path", "catalog_status"],
+  "properties": {
+    "schema_version": {"const": "pdx_local_file_record_v1"},
+    "workspace_id": {"type": "string", "format": "uuid"},
+    "source_root_id": {"type": "string", "format": "uuid"},
+    "file_record_id": {"type": "string", "format": "uuid"},
+    "relative_path": {"type": "string", "minLength": 1},
+    "display_name": {"type": "string", "minLength": 1},
+    "media_type": {"type": "string", "minLength": 1},
+    "catalog_status": {"enum": ["active", "missing", "deleted"]},
+    "volume_identity": {"type": ["string", "null"]},
+    "file_identity": {"type": ["string", "null"]},
+    "current_source_version_id": {"type": ["string", "null"], "format": "uuid"},
+    "last_reconciled_at": {"type": ["string", "null"], "format": "date-time"}
+  }
+}

@@ -1,0 +1,1 @@
+﻿pdx-local-ai delivery test document. Used by test_delivery_and_maintenance and CI workflow.

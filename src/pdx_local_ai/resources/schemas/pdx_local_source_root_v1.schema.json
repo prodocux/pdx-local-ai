@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.prodocux.local/pdx-local-ai/pdx_local_source_root_v1.schema.json",
+  "title": "PDX Local AI source root v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "workspace_id", "source_root_id", "canonical_path", "enabled", "reparse_policy", "allow_unc", "allow_device_paths", "allow_alternate_data_streams"],
+  "properties": {
+    "schema_version": {"const": "pdx_local_source_root_v1"},
+    "workspace_id": {"type": "string", "format": "uuid"},
+    "source_root_id": {"type": "string", "format": "uuid"},
+    "canonical_path": {"type": "string", "minLength": 3},
+    "enabled": {"type": "boolean"},
+    "reparse_policy": {"const": "reject"},
+    "allow_unc": {"const": false},
+    "allow_device_paths": {"const": false},
+    "allow_alternate_data_streams": {"const": false},
+    "include_globs": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "exclude_globs": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "created_at": {"type": "string", "format": "date-time"}
+  }
+}

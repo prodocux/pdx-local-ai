@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.prodocux.local/pdx-local-ai/pdx_local_retrieval_receipt_v1.schema.json",
+  "title": "PDX Local AI retrieval receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_id", "query_id", "workspace_id", "acl_policy_sha256", "execution", "scope_coverage", "source_coverage", "limits", "consumed", "result_count", "citation_ids", "created_at"],
+  "properties": {
+    "schema_version": {"const": "pdx_local_retrieval_receipt_v1"},
+    "receipt_id": {"type": "string", "format": "uuid"},
+    "query_id": {"type": "string", "format": "uuid"},
+    "workspace_id": {"type": "string", "format": "uuid"},
+    "acl_policy_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "execution": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "budget_exhausted", "stop_reason", "observed_elapsed_ms"],
+      "properties": {
+        "status": {"enum": ["completed", "failed"]},
+        "budget_exhausted": {"type": "boolean"},
+        "observed_elapsed_ms": {"type": "integer", "minimum": 0},
+        "stop_reason": {"enum": ["metadata_candidate_limit", "lexical_candidate_limit", "file_limit", "block_limit", "byte_limit", "time_limit", "score_threshold", "score_margin", "no_candidates", "error"]}
+      }
+    },
+    "scope_coverage": {
+      "type": "object", "additionalProperties": false,
+      "required": ["disposition", "eligible_roots", "searched_roots"],
+      "properties": {
+        "disposition": {"const": "bounded"},
+        "eligible_roots": {"type": "integer", "minimum": 0},
+        "searched_roots": {"type": "integer", "minimum": 0}
+      }
+    },
+    "source_coverage": {
+      "type": "object", "additionalProperties": false,
+      "required": ["complete_sources", "partial_known_sources", "partial_unknown_sources"],
+      "properties": {
+        "complete_sources": {"type": "integer", "minimum": 0},
+        "partial_known_sources": {"type": "integer", "minimum": 0},
+        "partial_unknown_sources": {"type": "integer", "minimum": 0}
+      }
+    },
+    "limits": {"$ref": "#/$defs/budget"},
+    "consumed": {"$ref": "#/$defs/budget"},
+    "result_count": {"type": "integer", "minimum": 0},
+    "citation_ids": {"type": "array", "items": {"type": "string", "format": "uuid"}, "uniqueItems": true},
+    "created_at": {"type": "string", "format": "date-time"}
+  },
+  "$defs": {
+    "budget": {
+      "type": "object", "additionalProperties": false,
+      "required": ["metadata_candidates", "lexical_candidates", "opened_files", "opened_blocks", "returned_bytes", "elapsed_ms"],
+      "properties": {
+        "metadata_candidates": {"type": "integer", "minimum": 0},
+        "lexical_candidates": {"type": "integer", "minimum": 0},
+        "opened_files": {"type": "integer", "minimum": 0},
+        "opened_blocks": {"type": "integer", "minimum": 0},
+        "returned_bytes": {"type": "integer", "minimum": 0},
+        "elapsed_ms": {"type": "integer", "minimum": 0}
+      }
+    }
+  }
+}

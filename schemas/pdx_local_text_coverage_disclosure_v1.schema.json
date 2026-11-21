@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.prodocux.local/pdx-local-ai/pdx_local_text_coverage_disclosure_v1.schema.json",
+  "title": "PDX Local AI text coverage disclosure v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "disclosure_id", "workspace_id", "source_root_id", "file_record_id", "source_version_id", "projection_id", "coverage_disposition", "unknown_remainder", "encoding", "bom_removed", "normalization_profile", "limits"],
+  "properties": {
+    "schema_version": {"const": "pdx_local_text_coverage_disclosure_v1"},
+    "disclosure_id": {"type": "string", "format": "uuid"},
+    "workspace_id": {"type": "string", "format": "uuid"},
+    "source_root_id": {"type": "string", "format": "uuid"},
+    "file_record_id": {"type": "string", "format": "uuid"},
+    "source_version_id": {"type": "string", "format": "uuid"},
+    "projection_id": {"type": "string", "format": "uuid"},
+    "coverage_disposition": {"enum": ["complete", "partial_known", "partial_unknown"]},
+    "unknown_remainder": {"type": "boolean"},
+    "encoding": {"enum": ["utf-8", "utf-8-bom", "utf-16-le-bom", "utf-16-be-bom"]},
+    "bom_removed": {"type": "boolean"},
+    "normalization_profile": {"const": "pdx_local_text_normalization_nfc_v1"},
+    "limits": {"type": "array", "items": {"$ref": "#/$defs/limit"}}
+  },
+  "allOf": [
+    {"if": {"properties": {"unknown_remainder": {"const": true}}}, "then": {"properties": {"coverage_disposition": {"const": "partial_unknown"}}}},
+    {"if": {"properties": {"coverage_disposition": {"const": "partial_unknown"}}}, "then": {"properties": {"unknown_remainder": {"const": true}}}},
+    {"if": {"properties": {"coverage_disposition": {"enum": ["complete", "partial_known"]}}}, "then": {"properties": {"unknown_remainder": {"const": false}}}},
+    {"if": {"properties": {"coverage_disposition": {"const": "complete"}}}, "then": {"properties": {"limits": {"maxItems": 0}}}},
+    {"if": {"properties": {"coverage_disposition": {"const": "partial_known"}}}, "then": {"properties": {"limits": {"minItems": 1}}}}
+  ],
+  "$defs": {
+    "limit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["limit_name", "observed_count", "known_total", "omitted_range", "truncation_reason", "coordinate_space"],
+      "properties": {
+        "limit_name": {"enum": ["source_bytes", "characters", "lines", "blocks", "line_length"]},
+        "observed_count": {"type": "integer", "minimum": 0},
+        "known_total": {"type": ["integer", "null"], "minimum": 0},
+        "omitted_range": {
+          "anyOf": [
+            {"type": "null"},
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["start", "end_exclusive"],
+              "properties": {
+                "start": {"type": "integer", "minimum": 0},
+                "end_exclusive": {"type": "integer", "minimum": 0}
+              }
+            }
+          ]
+        },
+        "truncation_reason": {"type": ["string", "null"], "pattern": "^[A-Z0-9_]+$"},
+        "coordinate_space": {"enum": ["byte", "code_point", "line"]},
+        "boundary": {"enum": ["safe_decode", "split_code_unit", "split_crlf"]},
+        "line_end_reached": {"type": "boolean"}
+      },
+      "allOf": [
+        {"if": {"properties": {"limit_name": {"const": "source_bytes"}}}, "then": {"properties": {"coordinate_space": {"const": "byte"}}}},
+        {"if": {"properties": {"limit_name": {"const": "characters"}}}, "then": {"properties": {"coordinate_space": {"const": "code_point"}}}},
+        {"if": {"properties": {"limit_name": {"const": "line_length"}}}, "then": {"properties": {"coordinate_space": {"const": "code_point"}}}},
+        {"if": {"properties": {"limit_name": {"enum": ["lines", "blocks"]}}}, "then": {"properties": {"coordinate_space": {"const": "line"}}}}
+      ]
+    }
+  }
+}

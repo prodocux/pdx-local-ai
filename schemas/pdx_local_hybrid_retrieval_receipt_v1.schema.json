@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://prodocux.dev/schemas/local-ai/pdx_local_hybrid_retrieval_receipt_v1.schema.json",
+  "title": "PDX Local AI hybrid retrieval receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_id", "query_id", "workspace_id", "principal_id", "source_root_id", "mode", "embedding_adapter_id", "candidate_limit", "lexical_candidates", "semantic_candidates", "unique_candidates", "result_limit", "result_count", "citation_ids", "created_at"],
+  "properties": {
+    "schema_version": {"const": "pdx_local_hybrid_retrieval_receipt_v1"},
+    "receipt_id": {"type": "string", "format": "uuid"},
+    "query_id": {"type": "string", "format": "uuid"},
+    "workspace_id": {"type": "string", "format": "uuid"},
+    "principal_id": {"type": "string", "minLength": 1},
+    "source_root_id": {"type": "string", "format": "uuid"},
+    "mode": {"const": "hybrid"},
+    "embedding_adapter_id": {"type": "string", "minLength": 1},
+    "candidate_limit": {"type": "integer", "minimum": 1, "maximum": 500},
+    "lexical_candidates": {"type": "integer", "minimum": 0, "maximum": 500},
+    "semantic_candidates": {"type": "integer", "minimum": 0, "maximum": 500},
+    "unique_candidates": {"type": "integer", "minimum": 0, "maximum": 500},
+    "result_limit": {"type": "integer", "minimum": 1, "maximum": 500},
+    "result_count": {"type": "integer", "minimum": 0, "maximum": 500},
+    "citation_ids": {"type": "array", "items": {"type": "string", "format": "uuid"}, "uniqueItems": true},
+    "created_at": {"type": "string", "format": "date-time"}
+  }
+}

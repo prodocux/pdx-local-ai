@@ -1,0 +1,27 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://prodocux.dev/schemas/local-ai/pdx_local_durable_publication_receipt_v1.schema.json","title":"Proposed durable publication receipt v1","type":"object","additionalProperties":false,
+  "required":["schema_version","receipt_id","workspace_id","proposal_id","decision_id","publication_request_id","proposal_sha256","decision_sha256","decision_verification_status","target_kind","target_id","target_version_id","target_content_sha256","provenance_category","verification_status","authority_id","authority_binding_sha256","disposition","terminal_result","created_target_ids","superseded_target_ids","idempotency_key","created_at"],
+  "properties":{
+    "schema_version":{"const":"pdx_local_durable_publication_receipt_v1"},"receipt_id":{"type":"string","format":"uuid"},"workspace_id":{"type":"string","format":"uuid"},"proposal_id":{"type":"string","format":"uuid"},"decision_id":{"type":"string","format":"uuid"},"publication_request_id":{"type":"string","format":"uuid"},"proposal_sha256":{"$ref":"#/$defs/digest"},"decision_sha256":{"$ref":"#/$defs/digest"},"decision_verification_status":{"enum":["unverified","user_asserted","citation_verified"]},
+    "target_kind":{"enum":["l2_durable","l3_canonical"]},"target_id":{"type":["string","null"],"format":"uuid"},"target_version_id":{"type":["string","null"],"format":"uuid"},"target_content_sha256":{"$ref":"#/$defs/digest"},
+    "provenance_category":{"enum":["user_stated","document_grounded","model_proposed"]},"verification_status":{"enum":["unverified","user_asserted","citation_verified"]},"authority_id":{"type":"string","minLength":1},"authority_binding_sha256":{"$ref":"#/$defs/digest"},
+    "disposition":{"enum":["novel","duplicate","updates"]},"terminal_result":{"enum":["published_new","published_update","duplicate_no_op","stale","rejected","failed"]},
+    "created_target_ids":{"type":"array","uniqueItems":true,"items":{"type":"string","format":"uuid"}},"superseded_target_ids":{"type":"array","uniqueItems":true,"items":{"type":"string","format":"uuid"}},"citation_ids":{"type":"array","uniqueItems":true,"items":{"type":"string","format":"uuid"}},"idempotency_key":{"type":"string","minLength":16,"maxLength":200},"created_at":{"type":"string","format":"date-time"}
+  },
+  "allOf":[
+    {"if":{"properties":{"terminal_result":{"const":"duplicate_no_op"}}},"then":{"properties":{"disposition":{"const":"duplicate"},"target_version_id":{"type":"null"},"created_target_ids":{"maxItems":0},"superseded_target_ids":{"maxItems":0}}}},
+    {"if":{"properties":{"terminal_result":{"enum":["stale","rejected","failed"]}}},"then":{"properties":{"target_version_id":{"type":"null"},"created_target_ids":{"maxItems":0},"superseded_target_ids":{"maxItems":0}}}},
+    {"if":{"properties":{"terminal_result":{"const":"published_new"}}},"then":{"properties":{"disposition":{"const":"novel"},"created_target_ids":{"minItems":1},"superseded_target_ids":{"maxItems":0}}}},
+    {"if":{"properties":{"terminal_result":{"const":"published_update"}}},"then":{"properties":{"disposition":{"const":"updates"},"created_target_ids":{"minItems":1},"superseded_target_ids":{"minItems":1}}}},
+    {"if":{"properties":{"provenance_category":{"const":"model_proposed"}}},"then":{"properties":{"verification_status":{"const":"unverified"}}}},
+    {"if":{"properties":{"provenance_category":{"const":"user_stated"}}},"then":{"properties":{"verification_status":{"const":"user_asserted"}}}},
+    {"if":{"properties":{"provenance_category":{"const":"document_grounded"}}},"then":{"properties":{"verification_status":{"const":"citation_verified"}}}}
+    ,{"if":{"properties":{"target_kind":{"const":"l3_canonical"}}},"then":{"required":["citation_ids"],"properties":{"provenance_category":{"const":"document_grounded"},"verification_status":{"const":"citation_verified"},"citation_ids":{"minItems":1}}}}
+    ,{"if":{"properties":{"target_kind":{"const":"l2_durable"},"terminal_result":{"enum":["published_new","published_update"]}},"required":["target_kind","terminal_result"]},"then":{"properties":{"target_version_id":{"type":"null"}}}}
+    ,{"if":{"properties":{"target_kind":{"const":"l3_canonical"},"terminal_result":{"enum":["published_new","published_update"]}},"required":["target_kind","terminal_result"]},"then":{"properties":{"target_version_id":{"type":"string","format":"uuid"}}}}
+    ,{"if":{"properties":{"decision_verification_status":{"const":"unverified"}}},"then":{"properties":{"verification_status":{"const":"unverified"}}}}
+    ,{"if":{"properties":{"decision_verification_status":{"const":"user_asserted"}}},"then":{"properties":{"verification_status":{"const":"user_asserted"}}}}
+    ,{"if":{"properties":{"decision_verification_status":{"const":"citation_verified"}}},"then":{"properties":{"verification_status":{"const":"citation_verified"}}}}
+  ],
+  "$defs":{"digest":{"type":"string","pattern":"^[a-f0-9]{64}$"}}
+}

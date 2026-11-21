@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pdx-local-ai"
+version = "0.0.1"
+requires-python = ">=3.12"
+dependencies = [
+  "prodocux==0.3.0rc13",
+  "pdx-artifact-engine==0.3.0a13",
+  "jsonschema>=4.22",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<9"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src", "."]
+testpaths = ["tests"]
+
+[tool.setuptools.package-data]
+pdx_local_ai = ["resources/sql/*.sql", "resources/schemas/*.json", "resources/docs/proposals/gate4c3/lexical-first-policy-v1.json"]

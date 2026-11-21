@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://prodocux.dev/schemas/local-ai/pdx_local_session_memory_item_v1.schema.json",
+  "title": "Proposed PDX Local AI session memory item v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "session_item_id", "workspace_id", "principal_id", "session_id", "content", "content_sha256", "provenance_category", "verification_status", "state", "created_at", "expires_at"],
+  "properties": {
+    "schema_version": {"const": "pdx_local_session_memory_item_v1"},
+    "session_item_id": {"type": "string", "format": "uuid"},
+    "workspace_id": {"type": "string", "format": "uuid"},
+    "principal_id": {"type": "string", "minLength": 1},
+    "session_id": {"type": "string", "format": "uuid"},
+    "content": {"type": "string", "minLength": 1},
+    "content_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "provenance_category": {"enum": ["user_stated", "document_grounded", "model_proposed"]},
+    "verification_status": {"enum": ["unverified", "user_asserted", "citation_verified"]},
+    "source_citation_id": {"type": ["string", "null"], "format": "uuid"},
+    "state": {"enum": ["captured", "promoted", "expired", "discarded"]},
+    "created_at": {"type": "string", "format": "date-time"},
+    "expires_at": {"type": "string", "format": "date-time"}
+  },
+  "allOf": [
+    {"if": {"properties": {"provenance_category": {"const": "model_proposed"}}}, "then": {"properties": {"verification_status": {"const": "unverified"}, "source_citation_id": {"type": "null"}}}},
+    {"if": {"properties": {"provenance_category": {"const": "user_stated"}}}, "then": {"properties": {"verification_status": {"const": "user_asserted"}, "source_citation_id": {"type": "null"}}}},
+    {"if": {"properties": {"provenance_category": {"const": "document_grounded"}}}, "then": {"required": ["source_citation_id"], "properties": {"verification_status": {"const": "citation_verified"}, "source_citation_id": {"type": "string", "format": "uuid"}}}}
+  ]
+}

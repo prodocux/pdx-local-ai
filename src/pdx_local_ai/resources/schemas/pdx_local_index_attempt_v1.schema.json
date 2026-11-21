@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.prodocux.local/pdx-local-ai/pdx_local_index_attempt_v1.schema.json",
+  "title": "PDX Local AI index attempt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "index_attempt_id", "workspace_id", "source_root_id", "file_record_id", "status", "attempt_number", "created_at", "updated_at"],
+  "properties": {
+    "schema_version": {"const": "pdx_local_index_attempt_v1"},
+    "index_attempt_id": {"type": "string", "format": "uuid"},
+    "workspace_id": {"type": "string", "format": "uuid"},
+    "source_root_id": {"type": "string", "format": "uuid"},
+    "file_record_id": {"type": "string", "format": "uuid"},
+    "observed_source_version_id": {"type": ["string", "null"], "format": "uuid"},
+    "status": {"enum": ["pending", "running", "succeeded", "retryable_failed", "terminal_failed", "stale"]},
+    "attempt_number": {"type": "integer", "minimum": 1},
+    "failure_code": {"type": ["string", "null"], "pattern": "^[A-Z0-9_]+$"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "updated_at": {"type": "string", "format": "date-time"}
+  }
+}

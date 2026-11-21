@@ -1,0 +1,95 @@
+ProDocuX Local AI - Windows bundled runtime conditions
+Terms version: 2026-10-14.3
+
+1. Scope and component source
+
+These conditions apply only to the Microsoft Distributable Code included in
+this Windows binary distribution, including VCRUNTIME140.dll. They do not
+change the licenses of ProDocuX Local AI, CPython or other third-party code.
+They do not apply to Linux or macOS distributions that do not contain this
+Microsoft code.
+
+The audited Windows package includes VCRUNTIME140.dll whose bytes match that
+file in the official CPython 3.12.2 Windows x64 distribution. This statement
+does not assert byte identity for every file in the application package.
+That component is supplied subject to the licenses and Windows binary
+redistribution conditions accompanying that official distribution. The
+original additional Windows binary conditions are reproduced in Section 3;
+other notices and licenses are in THIRD-PARTY-NOTICES.txt. Microsoft's code
+remains subject to its own conditions, not the Python Software Foundation
+license. Source/hash verification identifies the components to which these
+conditions apply; it is not itself a license grant.
+
+2. Conditions accepted for the Microsoft code
+
+By explicitly accepting these conditions, you agree, for the Microsoft
+Distributable Code only, to comply with the original conditions reproduced
+in Section 3, including its requirements for further distribution. This
+section does not add to or modify those original conditions.
+
+3. Original CPython Windows binary conditions
+
+Additional Conditions for this Windows binary build
+---------------------------------------------------
+
+This program is linked with and uses Microsoft Distributable Code,
+copyrighted by Microsoft Corporation. The Microsoft Distributable Code
+is embedded in each .exe, .dll and .pyd file as a result of running
+the code through a linker.
+
+If you further distribute programs that include the Microsoft
+Distributable Code, you must comply with the restrictions on
+distribution specified by Microsoft. In particular, you must require
+distributors and external end users to agree to terms that protect the
+Microsoft Distributable Code at least as much as Microsoft's own
+requirements for the Distributable Code. See Microsoft's documentation
+(included in its developer tools and on its website at microsoft.com)
+for specific details.
+
+Redistribution of the Windows binary build of the Python interpreter
+complies with this agreement, provided that you do not:
+
+- alter any copyright, trademark or patent notice in Microsoft's
+Distributable Code;
+
+- use Microsoft's trademarks in your programs' names or in a way that
+suggests your programs come from or are endorsed by Microsoft;
+
+- distribute Microsoft's Distributable Code to run on a platform other
+than Microsoft operating systems, run-time technologies or application
+platforms; or
+
+- include Microsoft Distributable Code in malicious, deceptive or
+unlawful programs.
+
+These restrictions apply only to the Microsoft Distributable Code as
+defined above, not to Python itself or any programs running on the
+Python interpreter. The redistribution of the Python interpreter and
+libraries is governed by the Python Software License included with this
+file, or by other licenses as marked.
+
+End of reproduced original conditions.
+
+Editorial source note added by ProDocuX (not part of the original text):
+Source of the reproduced text: LICENSE.txt in the official CPython 3.12.2
+Windows x64 embedded distribution:
+https://www.python.org/ftp/python/3.12.2/python-3.12.2-embed-amd64.zip
+
+In the original text, "this file" refers to CPython's LICENSE.txt. The Python
+Software Foundation License Version 2 is reproduced in the accompanying
+THIRD-PARTY-NOTICES.txt.
+
+4. Acceptance and local record
+
+This acceptance-record mechanism records the terms version and SHA-256, product
+version, executable SHA-256, UTC acceptance time and acceptance method locally.
+It does not request a name, account, IP address or machine identifier, and
+does not send the acceptance record over the network.
+These statements describe this mechanism, not all logging or network
+behavior of the product or its host applications.
+
+Acceptance does not itself grant redistribution rights, establish the
+distributor's eligibility, constitute legal certification, or make the local
+record tamper-proof. It does not waive rights under the licenses of ProDocuX
+Local AI or other third-party code, or rights that applicable law does not
+permit to be waived.

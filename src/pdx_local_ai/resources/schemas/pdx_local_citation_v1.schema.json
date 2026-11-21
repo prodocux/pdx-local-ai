@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.prodocux.local/pdx-local-ai/pdx_local_citation_v1.schema.json",
+  "title": "PDX Local AI citation v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "citation_id", "workspace_id", "source_root_id", "file_record_id", "source_version_id", "source_sha256", "projection_id", "parser_contract", "block_instance_id", "locator", "quote_start", "quote_end", "quote_normalization", "quoted_text_sha256"],
+  "properties": {
+    "schema_version": {"const": "pdx_local_citation_v1"},
+    "citation_id": {"type": "string", "format": "uuid"},
+    "workspace_id": {"type": "string", "format": "uuid"},
+    "source_root_id": {"type": "string", "format": "uuid"},
+    "file_record_id": {"type": "string", "format": "uuid"},
+    "source_version_id": {"type": "string", "format": "uuid"},
+    "source_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "projection_id": {"type": "string", "format": "uuid"},
+    "parser_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": {"name": {"type": "string", "minLength": 1}, "version": {"type": "string", "minLength": 1}}
+    },
+    "block_instance_id": {"type": "string", "format": "uuid"},
+    "locator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "value"],
+      "properties": {"kind": {"enum": ["page", "paragraph", "table", "cell", "structural"]}, "value": {"type": "string", "minLength": 1}}
+    },
+    "quote_start": {"type": "integer", "minimum": 0},
+    "quote_end": {"type": "integer", "minimum": 1},
+    "quote_normalization": {"const": "unicode_nfc_codepoint_v1"},
+    "quoted_text_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

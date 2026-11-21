@@ -1,0 +1,31 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://prodocux.dev/schemas/local-ai/pdx_local_durable_promotion_proposal_v1.schema.json",
+  "title":"Proposed durable promotion proposal v1",
+  "type":"object","additionalProperties":false,
+  "required":["schema_version","proposal_id","request_id","workspace_id","principal_id","source_bindings","target_kind","target_id","proposed_content","proposed_content_sha256","authority_kind","authority_id","provenance_category","verification_status","proposer_actor_id","proposer_actor_kind","deterministic_disposition","disposition_reason","state","request_fingerprint","idempotency_key","created_at"],
+  "properties":{
+    "schema_version":{"const":"pdx_local_durable_promotion_proposal_v1"},"proposal_id":{"type":"string","format":"uuid"},"request_id":{"type":"string","format":"uuid"},
+    "workspace_id":{"type":"string","format":"uuid"},"principal_id":{"type":"string","minLength":1},
+    "source_bindings":{"type":"array","minItems":1,"maxItems":50,"items":{"$ref":"#/$defs/source"}},
+    "target_kind":{"enum":["l2_durable","l3_canonical"]},"target_id":{"type":["string","null"],"format":"uuid"},
+    "proposed_content":{"type":"string","minLength":1,"maxLength":100000},"proposed_content_sha256":{"$ref":"#/$defs/digest"},
+    "authority_kind":{"enum":["principal","workspace"]},"authority_id":{"type":"string","minLength":1},
+    "provenance_category":{"enum":["user_stated","document_grounded","model_proposed"]},"verification_status":{"enum":["unverified","user_asserted","citation_verified"]},
+    "citation_ids":{"type":"array","uniqueItems":true,"items":{"type":"string","format":"uuid"}},"authorization_snapshot_sha256":{"$ref":"#/$defs/digest"},
+    "proposer_actor_id":{"type":"string","minLength":1},"proposer_actor_kind":{"enum":["human","model"]},
+    "deterministic_disposition":{"enum":["novel","duplicate","unresolved"]},"disposition_reason":{"enum":["no_target_declared","exact_content_and_authority","nonidentical_target_declared"]},
+    "state":{"enum":["pending_review","approved","rejected","cancelled","stale","published"]},"request_fingerprint":{"$ref":"#/$defs/digest"},"idempotency_key":{"type":"string","minLength":16,"maxLength":200},"created_at":{"type":"string","format":"date-time"}
+  },
+  "allOf":[
+    {"if":{"properties":{"target_id":{"type":"null"}}},"then":{"properties":{"deterministic_disposition":{"const":"novel"},"disposition_reason":{"const":"no_target_declared"}}}},
+    {"if":{"properties":{"target_id":{"type":"string"}}},"then":{"properties":{"deterministic_disposition":{"enum":["duplicate","unresolved"]}}}},
+    {"if":{"properties":{"deterministic_disposition":{"const":"duplicate"}}},"then":{"properties":{"target_id":{"type":"string","format":"uuid"},"disposition_reason":{"const":"exact_content_and_authority"}}}},
+    {"if":{"properties":{"deterministic_disposition":{"const":"unresolved"}}},"then":{"properties":{"target_id":{"type":"string","format":"uuid"},"disposition_reason":{"const":"nonidentical_target_declared"}}}},
+    {"if":{"properties":{"provenance_category":{"const":"model_proposed"}}},"then":{"properties":{"verification_status":{"const":"unverified"}}}},
+    {"if":{"properties":{"provenance_category":{"const":"user_stated"}}},"then":{"properties":{"verification_status":{"const":"user_asserted"}}}},
+    {"if":{"properties":{"provenance_category":{"const":"document_grounded"}}},"then":{"required":["citation_ids","authorization_snapshot_sha256"],"properties":{"verification_status":{"const":"citation_verified"},"citation_ids":{"minItems":1}}}},
+    {"if":{"properties":{"target_kind":{"const":"l3_canonical"}}},"then":{"required":["citation_ids","authorization_snapshot_sha256"],"properties":{"provenance_category":{"const":"document_grounded"},"verification_status":{"const":"citation_verified"},"citation_ids":{"minItems":1}}}}
+  ],
+  "$defs":{"digest":{"type":"string","pattern":"^[a-f0-9]{64}$"},"source":{"type":"object","additionalProperties":false,"required":["working_memory_id","content_sha256","state","expires_at"],"properties":{"working_memory_id":{"type":"string","format":"uuid"},"content_sha256":{"$ref":"#/$defs/digest"},"state":{"const":"active"},"expires_at":{"type":"string","format":"date-time"}}}}
+}

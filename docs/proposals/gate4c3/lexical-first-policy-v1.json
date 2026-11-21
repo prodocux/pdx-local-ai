@@ -1,0 +1,16 @@
+{
+  "ambiguity": "strict_top_score_greater_than_second",
+  "decision_order": [
+    "budget_exhaustion",
+    "no_lexical_candidates",
+    "insufficient_result_count",
+    "low_term_coverage",
+    "ambiguous_lexical_rank",
+    "lexical_sufficient"
+  ],
+  "minimum_lexical_results": 2,
+  "minimum_query_term_coverage": 1.0,
+  "policy_id": "lexical-first",
+  "policy_version": "1",
+  "stop_words": []
+}

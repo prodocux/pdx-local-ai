@@ -1,0 +1,164 @@
+name: Public-root delivery CI
+on:
+  push:
+    branches: ["candidate/**", "main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: delivery-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  unit-tests:
+    runs-on: windows-2022
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c # v6.0.0
+        with:
+          python-version: "3.12.2"
+          architecture: x64
+      - name: Install locked dependencies
+        shell: pwsh
+        run: |
+          python -m pip install --require-hashes --only-binary=:all: -r requirements-ci.lock
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python -m pip install --no-deps --no-build-isolation -e .
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python -m pip check
+          exit $LASTEXITCODE
+      - name: Source tests (no package-dependent tests here)
+        shell: pwsh
+        run: |
+          python -m pytest tests/test_validation.py tests/test_public_delivery_ci.py tests/test_windows_runtime_terms.py -v --junitxml=unit-results.xml 2>&1 | Tee-Object unit-test-output.txt
+          exit $LASTEXITCODE
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        if: always()
+        with:
+          name: unit-evidence
+          path: |
+            unit-test-output.txt
+            unit-results.xml
+
+  build-package:
+    needs: unit-tests
+    runs-on: windows-2022
+    timeout-minutes: 25
+    outputs:
+      zip_name: ${{ steps.package.outputs.zip_name }}
+      zip_sha256: ${{ steps.package.outputs.zip_sha256 }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c
+        with:
+          python-version: "3.12.2"
+          architecture: x64
+      - name: Install locked build dependencies
+        shell: pwsh
+        run: |
+          python -m pip install --require-hashes --only-binary=:all: -r requirements-ci.lock
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python -m pip install --no-deps --no-build-isolation -e .
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python -m pip check
+          exit $LASTEXITCODE
+      - name: Build
+        shell: pwsh
+        run: |
+          python -m PyInstaller pdx-local.spec --noconfirm 2>&1 | Tee-Object build-output.txt
+          exit $LASTEXITCODE
+      - name: Package exact candidate
+        id: package
+        shell: pwsh
+        run: |
+          $batch = "ci-${{ github.run_id }}-${{ github.run_attempt }}"
+          python scripts/package_distribution.py --batch $batch 2>&1 | Tee-Object package-output.txt
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $name = "pdx-local-ai-windows-x64-v0.0.1-$batch.zip"
+          $sha = (Get-FileHash "dist/$name" -Algorithm SHA256).Hash.ToLower()
+          $sidecar = (Get-Content "dist/$($name -replace '\.zip$','.sha256')" -Raw).Trim()
+          if ($sidecar -ne "sha256: $sha") { throw "Sidecar mismatch" }
+          "zip_name=$name" >> $env:GITHUB_OUTPUT
+          "zip_sha256=$sha" >> $env:GITHUB_OUTPUT
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: delivery-package
+          if-no-files-found: error
+          path: |
+            dist/*-ci-${{ github.run_id }}-${{ github.run_attempt }}.zip
+            dist/*-ci-${{ github.run_id }}-${{ github.run_attempt }}.sha256
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: build-evidence
+          path: |
+            build-output.txt
+            package-output.txt
+
+  delivery-test:
+    # Hosted image contains Python: this is NOT the clean-OS RG-1 gate.
+    needs: build-package
+    runs-on: windows-2022
+    timeout-minutes: 20
+    env:
+      PDX_DELIVERY_SHA256: ${{ needs.build-package.outputs.zip_sha256 }}
+      ZIP_NAME: ${{ needs.build-package.outputs.zip_name }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c
+        with:
+          python-version: "3.12.2"
+          architecture: x64
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: delivery-package
+          path: delivery
+      - name: Probe installed EXE outside checkout
+        shell: pwsh
+        run: |
+          $zip = (Resolve-Path "delivery/$env:ZIP_NAME").Path
+          "PDX_DELIVERY_ZIP=$zip" >> $env:GITHUB_ENV
+          python scripts/ci_delivery_probe.py --zip $zip --sha256 $env:PDX_DELIVERY_SHA256 --work-dir "$env:RUNNER_TEMP/delivery-probe" 2>&1 | Tee-Object delivery-probe-output.txt
+          exit $LASTEXITCODE
+      - name: Install locked test driver dependencies
+        shell: pwsh
+        run: |
+          python -m pip install --require-hashes --only-binary=:all: -r requirements-ci.lock
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python -m pip install --no-deps --no-build-isolation -e .
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python -m pip check
+          exit $LASTEXITCODE
+      - name: Package-dependent acceptance tests (no silent skips)
+        shell: pwsh
+        run: |
+          Expand-Archive -LiteralPath $env:PDX_DELIVERY_ZIP -DestinationPath acceptance-package
+          $bin = Join-Path (Resolve-Path acceptance-package) "pdx-local-ai-windows-x64-v0.0.1/bin"
+          New-Item dist -ItemType Directory -Force | Out-Null
+          Copy-Item -LiteralPath $bin -Destination dist/pdx-local -Recurse
+          python scripts/verify_windows_runtime_terms.py --binary-dir dist/pdx-local --work-dir "$env:RUNNER_TEMP/runtime-terms-probe"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python scripts/run_ci_acceptance.py --accept-windows-runtime-terms 2>&1 | Tee-Object delivery-acceptance-output.txt
+          exit $LASTEXITCODE
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: delivery-evidence
+          path: |
+            delivery-probe-output.txt
+            delivery-acceptance-output.txt
+            delivery-results.xml
+            ${{ runner.temp }}/delivery-probe/evidence/
+            ${{ runner.temp }}/runtime-terms-probe/*.log
+            ${{ runner.temp }}/runtime-terms-probe/summary.json

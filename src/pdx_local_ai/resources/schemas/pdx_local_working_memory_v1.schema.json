@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://prodocux.dev/schemas/local-ai/pdx_local_working_memory_v1.schema.json",
+  "title": "Proposed PDX Local AI working memory v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "working_memory_id", "workspace_id", "principal_id", "scope_id", "content", "content_sha256", "provenance_category", "verification_status", "state", "source_session_item_id", "created_at", "expires_at"],
+  "properties": {
+    "schema_version": {"const": "pdx_local_working_memory_v1"},
+    "working_memory_id": {"type": "string", "format": "uuid"},
+    "workspace_id": {"type": "string", "format": "uuid"},
+    "principal_id": {"type": "string", "minLength": 1},
+    "scope_id": {"type": "string", "minLength": 1},
+    "content": {"type": "string", "minLength": 1},
+    "content_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "provenance_category": {"enum": ["user_stated", "document_grounded", "model_proposed"]},
+    "verification_status": {"enum": ["unverified", "user_asserted", "citation_verified"]},
+    "source_citation_id": {"type": ["string", "null"], "format": "uuid"},
+    "source_session_item_id": {"type": "string", "format": "uuid"},
+    "state": {"enum": ["active", "expired", "retracted"]},
+    "created_at": {"type": "string", "format": "date-time"},
+    "expires_at": {"type": "string", "format": "date-time"}
+  },
+  "allOf": [
+    {"if": {"properties": {"provenance_category": {"const": "model_proposed"}}}, "then": {"properties": {"verification_status": {"const": "unverified"}, "source_citation_id": {"type": "null"}}}},
+    {"if": {"properties": {"provenance_category": {"const": "user_stated"}}}, "then": {"properties": {"verification_status": {"const": "user_asserted"}, "source_citation_id": {"type": "null"}}}},
+    {"if": {"properties": {"provenance_category": {"const": "document_grounded"}}}, "then": {"required": ["source_citation_id"], "properties": {"verification_status": {"const": "citation_verified"}, "source_citation_id": {"type": "string", "format": "uuid"}}}}
+  ]
+}

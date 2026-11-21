@@ -1,0 +1,18 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://prodocux.dev/schemas/local-ai/pdx_local_retrieval_stage_receipt_v1.schema.json",
+  "title":"Gate 4C retrieval stage receipt v1","type":"object","additionalProperties":false,
+  "required":["schema_version","stage_receipt_id","request_id","query_id","workspace_id","principal_id","stage","disposition","entry_reason","profile","limits","consumed","input_candidate_count","output_candidate_count","authorized_ids_sha256","created_at"],
+  "properties":{
+    "schema_version":{"const":"pdx_local_retrieval_stage_receipt_v1"},"stage_receipt_id":{"type":"string","format":"uuid"},"request_id":{"type":"string","format":"uuid"},"query_id":{"type":"string","format":"uuid"},"workspace_id":{"type":"string","format":"uuid"},"principal_id":{"type":"string","minLength":1},
+    "stage":{"enum":["r0_scope","r1_lexical","r2_vector","r3_rerank","r4_materialize","document_catalog"]},"disposition":{"enum":["completed","skipped"]},
+    "entry_reason":{"enum":["request_start","explicit_memory_layer","no_lexical_candidates","insufficient_result_count","low_term_coverage","ambiguous_lexical_rank","lexical_budget_exhausted","lexical_sufficient","vector_not_authorized","vector_generation_unavailable","vector_sufficient","rerank_not_configured","authorized_rerank","document_not_authorized","document_not_needed","document_no_budget","document_scope_rejected","authorized_document_expansion","materialization_required"]},
+    "profile":{"type":["string","null"],"enum":["l2","l3","document_block",null]},"generation_id":{"type":["string","null"],"format":"uuid"},"generation_sha256":{"anyOf":[{"$ref":"#/$defs/digest"},{"type":"null"}]},
+    "limits":{"$ref":"#/$defs/counters"},"consumed":{"$ref":"#/$defs/counters"},"input_candidate_count":{"type":"integer","minimum":0},"output_candidate_count":{"type":"integer","minimum":0},"authorized_ids_sha256":{"$ref":"#/$defs/digest"},"subreceipt_id":{"type":["string","null"],"format":"uuid"},"subreceipt_sha256":{"anyOf":[{"$ref":"#/$defs/digest"},{"type":"null"}]},"created_at":{"type":"string","format":"date-time"}
+  },
+  "allOf":[
+    {"if":{"properties":{"stage":{"const":"r2_vector"},"disposition":{"const":"completed"}}},"then":{"required":["generation_id","generation_sha256"],"properties":{"profile":{"enum":["l2","l3"]},"generation_id":{"type":"string","format":"uuid"},"generation_sha256":{"$ref":"#/$defs/digest"}}}},
+    {"if":{"properties":{"stage":{"const":"document_catalog"},"disposition":{"const":"completed"}}},"then":{"required":["subreceipt_id","subreceipt_sha256"],"properties":{"profile":{"type":"null"},"subreceipt_id":{"type":"string","format":"uuid"},"subreceipt_sha256":{"$ref":"#/$defs/digest"}}}}
+  ],
+  "$defs":{"digest":{"type":"string","pattern":"^[a-f0-9]{64}$"},"counters":{"type":"object","additionalProperties":false,"required":["candidates","results","document_files","document_blocks","returned_bytes","elapsed_ms"],"properties":{"candidates":{"type":"integer","minimum":0},"results":{"type":"integer","minimum":0},"document_files":{"type":"integer","minimum":0},"document_blocks":{"type":"integer","minimum":0},"returned_bytes":{"type":"integer","minimum":0},"elapsed_ms":{"type":"integer","minimum":0}}}}
+}

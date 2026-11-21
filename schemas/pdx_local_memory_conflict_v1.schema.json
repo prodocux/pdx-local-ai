@@ -1,0 +1,13 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://prodocux.dev/schemas/local-ai/pdx_local_memory_conflict_v1.schema.json",
+  "title":"Proposed memory conflict record v1",
+  "type":"object","additionalProperties":false,
+  "required":["schema_version","conflict_id","proposal_id","workspace_id","target_version_ids","claim_digests","authority_binding_sha256","reviewer_actor_id","category","resolution_state","created_at"],
+  "properties":{
+    "schema_version":{"const":"pdx_local_memory_conflict_v1"},"conflict_id":{"type":"string","format":"uuid"},"proposal_id":{"type":"string","format":"uuid"},"workspace_id":{"type":"string","format":"uuid"},
+    "target_version_ids":{"type":"array","minItems":1,"uniqueItems":true,"items":{"type":"string","format":"uuid"}},"claim_digests":{"type":"array","minItems":2,"uniqueItems":true,"items":{"type":"string","pattern":"^[a-f0-9]{64}$"}},
+    "citation_ids":{"type":"array","uniqueItems":true,"items":{"type":"string","format":"uuid"}},"authority_binding_sha256":{"type":"string","pattern":"^[a-f0-9]{64}$"},
+    "reviewer_actor_id":{"type":"string","minLength":1},"category":{"type":"string","minLength":1},"resolution_state":{"enum":["open","resolved_by_rejection","resolved_by_revised_proposal","resolved_by_human_update_decision"]},"created_at":{"type":"string","format":"date-time"}
+  }
+}

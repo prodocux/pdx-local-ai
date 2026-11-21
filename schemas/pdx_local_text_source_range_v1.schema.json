@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.prodocux.local/pdx-local-ai/pdx_local_text_source_range_v1.schema.json",
+  "title": "PDX Local AI text source range v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "locator_contract", "workspace_id", "projection_id", "block_instance_id", "line_start", "line_end_exclusive", "source_codepoint_start", "source_codepoint_end_exclusive"],
+  "properties": {
+    "schema_version": {"const": "pdx_local_text_source_range_v1"},
+    "locator_contract": {"const": "text_line_codepoint_v1"},
+    "workspace_id": {"type": "string", "format": "uuid"},
+    "projection_id": {"type": "string", "format": "uuid"},
+    "block_instance_id": {"type": "string", "format": "uuid"},
+    "line_start": {"type": "integer", "minimum": 1},
+    "line_end_exclusive": {"type": "integer", "minimum": 1},
+    "source_codepoint_start": {"type": "integer", "minimum": 0},
+    "source_codepoint_end_exclusive": {"type": "integer", "minimum": 0}
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://prodocux.dev/schemas/local-ai/pdx_local_layered_recall_receipt_v1.schema.json",
+  "title": "Proposed layered recall receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_id", "query_id", "workspace_id", "principal_id", "requested_layers", "searched_layers", "verified_only", "per_layer", "aggregate_limits", "aggregate_consumed", "result_count", "results", "document_retrieval_requested", "stop_reason", "created_at"],
+  "properties": {
+    "schema_version": {"const": "pdx_local_layered_recall_receipt_v1"},
+    "receipt_id": {"type": "string", "format": "uuid"},
+    "query_id": {"type": "string", "format": "uuid"},
+    "workspace_id": {"type": "string", "format": "uuid"},
+    "principal_id": {"type": "string", "minLength": 1},
+    "requested_layers": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["l0", "l1"]}},
+    "searched_layers": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["l0", "l1"]}},
+    "verified_only": {"type": "boolean"},
+    "per_layer": {"type": "object", "additionalProperties": {"$ref": "#/$defs/layerConsumption"}, "propertyNames": {"enum": ["l0", "l1"]}},
+    "aggregate_limits": {"$ref": "#/$defs/limits"},
+    "aggregate_consumed": {"$ref": "#/$defs/consumed"},
+    "result_count": {"type": "integer", "minimum": 0},
+    "results": {"type": "array", "items": {"$ref": "#/$defs/result"}},
+    "document_retrieval_requested": {"const": false},
+    "stop_reason": {"enum": ["results_satisfied", "candidate_limit", "result_limit", "byte_limit", "time_limit", "no_candidates"]},
+    "created_at": {"type": "string", "format": "date-time"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"verified_only": {"const": true}}},
+      "then": {
+        "properties": {
+          "aggregate_consumed": {"required": ["excluded_unverified"]},
+          "per_layer": {
+            "additionalProperties": {
+              "properties": {
+                "consumed": {"required": ["excluded_unverified"]}
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"searched_layers": {"contains": {"const": "l0"}}}},
+      "then": {"properties": {"per_layer": {"required": ["l0"]}}}
+    },
+    {
+      "if": {"properties": {"searched_layers": {"contains": {"const": "l1"}}}},
+      "then": {"properties": {"per_layer": {"required": ["l1"]}}}
+    }
+  ],
+  "$defs": {
+    "limits": {"type": "object", "additionalProperties": false, "required": ["candidates", "results", "returned_bytes", "elapsed_ms"], "properties": {"candidates": {"type": "integer", "minimum": 1}, "results": {"type": "integer", "minimum": 1}, "returned_bytes": {"type": "integer", "minimum": 1}, "elapsed_ms": {"type": "integer", "minimum": 1}}},
+    "consumed": {"type": "object", "additionalProperties": false, "required": ["candidates", "results", "returned_bytes", "elapsed_ms"], "properties": {"candidates": {"type": "integer", "minimum": 0}, "results": {"type": "integer", "minimum": 0}, "returned_bytes": {"type": "integer", "minimum": 0}, "elapsed_ms": {"type": "integer", "minimum": 0}, "excluded_unverified": {"type": "integer", "minimum": 0}}},
+    "layerConsumption": {"type": "object", "additionalProperties": false, "required": ["limits", "consumed"], "properties": {"limits": {"$ref": "#/$defs/limits"}, "consumed": {"$ref": "#/$defs/consumed"}}},
+    "result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["layer", "item_id", "content_sha256", "provenance_category", "verification_status", "expires_at"],
+      "properties": {
+        "layer": {"enum": ["l0", "l1"]},
+        "item_id": {"type": "string", "format": "uuid"},
+        "content_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "provenance_category": {"enum": ["user_stated", "document_grounded", "model_proposed"]},
+        "verification_status": {"enum": ["unverified", "user_asserted", "citation_verified"]},
+        "expires_at": {"type": "string", "format": "date-time"}
+      },
+      "allOf": [
+        {"if": {"properties": {"provenance_category": {"const": "model_proposed"}}}, "then": {"properties": {"verification_status": {"const": "unverified"}}}},
+        {"if": {"properties": {"provenance_category": {"const": "user_stated"}}}, "then": {"properties": {"verification_status": {"const": "user_asserted"}}}},
+        {"if": {"properties": {"provenance_category": {"const": "document_grounded"}}}, "then": {"properties": {"verification_status": {"const": "citation_verified"}}}}
+      ]
+    }
+  }
+}

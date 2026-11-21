@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.prodocux.local/pdx-local-ai/pdx_local_reconciliation_receipt_v1.schema.json",
+  "title": "PDX Local AI reconciliation receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "reconciliation_run_id", "workspace_id", "source_root_id", "status", "scan_passes", "stale_retries_consumed", "missing_retention", "integrity", "completed_at"],
+  "properties": {
+    "schema_version": {"const": "pdx_local_reconciliation_receipt_v1"},
+    "reconciliation_run_id": {"type": "string", "format": "uuid"},
+    "workspace_id": {"type": "string", "format": "uuid"},
+    "source_root_id": {"type": "string", "format": "uuid"},
+    "status": {"enum": ["succeeded", "failed"]},
+    "scan_passes": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["indexed", "unchanged", "stale", "failed", "missing"],
+        "properties": {
+          "indexed": {"type": "integer", "minimum": 0},
+          "unchanged": {"type": "integer", "minimum": 0},
+          "stale": {"type": "integer", "minimum": 0},
+          "failed": {"type": "integer", "minimum": 0},
+          "missing": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    "stale_retries_consumed": {"type": "integer", "minimum": 0},
+    "missing_retention": {
+      "type": "object", "additionalProperties": false,
+      "required": ["currently_missing", "transitioned_to_deleted"],
+      "properties": {
+        "currently_missing": {"type": "integer", "minimum": 0},
+        "transitioned_to_deleted": {"type": "integer", "minimum": 0}
+      }
+    },
+    "integrity": {
+      "type": "object", "additionalProperties": false,
+      "required": ["passed", "sqlite_integrity", "foreign_key_errors", "orphan_fts_rows", "missing_fts_rows", "projection_block_count_mismatches", "current_source_pointer_errors"],
+      "properties": {
+        "passed": {"type": "boolean"},
+        "sqlite_integrity": {"type": "array", "items": {"type": "string"}},
+        "foreign_key_errors": {"type": "integer", "minimum": 0},
+        "orphan_fts_rows": {"type": "integer", "minimum": 0},
+        "missing_fts_rows": {"type": "integer", "minimum": 0},
+        "projection_block_count_mismatches": {"type": "integer", "minimum": 0},
+        "current_source_pointer_errors": {"type": "integer", "minimum": 0}
+      }
+    },
+    "completed_at": {"type": "string", "format": "date-time"}
+  }
+}

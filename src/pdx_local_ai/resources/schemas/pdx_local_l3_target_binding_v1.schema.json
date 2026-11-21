@@ -1,0 +1,27 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://prodocux.dev/schemas/local-ai/pdx_local_l3_target_binding_v1.schema.json",
+  "title":"Gate 4B-2 immutable L3 proposal target binding v1",
+  "type":"object","additionalProperties":false,
+  "required":["schema_version","binding_id","proposal_id","proposal_sha256","workspace_id","workspace_authority_id","canonical_namespace","subject_key","deterministic_disposition","canonical_knowledge_id","current_version_id","current_version_number","current_content_sha256","source_working_memory_id","source_content_sha256","citation_ids","authorization_snapshot_sha256","created_at"],
+  "properties":{
+    "schema_version":{"const":"pdx_local_l3_target_binding_v1"},
+    "binding_id":{"type":"string","format":"uuid"},"proposal_id":{"type":"string","format":"uuid"},
+    "proposal_sha256":{"$ref":"#/$defs/digest"},"workspace_id":{"type":"string","format":"uuid"},
+    "workspace_authority_id":{"type":"string","minLength":1},"canonical_namespace":{"type":"string","minLength":1,"maxLength":200},
+    "subject_key":{"type":"string","minLength":1,"maxLength":500},
+    "deterministic_disposition":{"enum":["novel","duplicate","unresolved"]},
+    "canonical_knowledge_id":{"type":["string","null"],"format":"uuid"},
+    "current_version_id":{"type":["string","null"],"format":"uuid"},
+    "current_version_number":{"type":["integer","null"],"minimum":1},
+    "current_content_sha256":{"oneOf":[{"type":"null"},{"$ref":"#/$defs/digest"}]},
+    "source_working_memory_id":{"type":"string","format":"uuid"},"source_content_sha256":{"$ref":"#/$defs/digest"},
+    "citation_ids":{"type":"array","minItems":1,"uniqueItems":true,"items":{"type":"string","format":"uuid"}},
+    "authorization_snapshot_sha256":{"$ref":"#/$defs/digest"},"created_at":{"type":"string","format":"date-time"}
+  },
+  "allOf":[
+    {"if":{"properties":{"deterministic_disposition":{"const":"novel"}}},"then":{"properties":{"canonical_knowledge_id":{"type":"null"},"current_version_id":{"type":"null"},"current_version_number":{"type":"null"},"current_content_sha256":{"type":"null"}}}},
+    {"if":{"properties":{"deterministic_disposition":{"enum":["duplicate","unresolved"]}}},"then":{"properties":{"canonical_knowledge_id":{"type":"string","format":"uuid"},"current_version_id":{"type":"string","format":"uuid"},"current_version_number":{"type":"integer","minimum":1},"current_content_sha256":{"$ref":"#/$defs/digest"}}}}
+  ],
+  "$defs":{"digest":{"type":"string","pattern":"^[a-f0-9]{64}$"}}
+}

@@ -1,0 +1,18 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://prodocux.dev/schemas/local-ai/pdx_local_canonical_withdrawal_request_v1.schema.json",
+  "title":"Gate 4B-2 canonical withdrawal request v1",
+  "type":"object","additionalProperties":false,
+  "required":["schema_version","withdrawal_request_id","workspace_id","canonical_knowledge_id","observed_current_version_id","canonical_namespace","workspace_authority_id","reviewer_actor_id","reviewer_actor_kind","workspace_reviewer_grant_id","workspace_reviewer_grant_sha256","reason_code","idempotency_key","request_fingerprint","created_at"],
+  "properties":{
+    "schema_version":{"const":"pdx_local_canonical_withdrawal_request_v1"},
+    "withdrawal_request_id":{"type":"string","format":"uuid"},"workspace_id":{"type":"string","format":"uuid"},
+    "canonical_knowledge_id":{"type":"string","format":"uuid"},"observed_current_version_id":{"type":"string","format":"uuid"},
+    "canonical_namespace":{"type":"string","minLength":1},"workspace_authority_id":{"type":"string","minLength":1},
+    "reviewer_actor_id":{"type":"string","minLength":1},"reviewer_actor_kind":{"const":"human"},
+    "workspace_reviewer_grant_id":{"type":"string","format":"uuid"},"workspace_reviewer_grant_sha256":{"$ref":"#/$defs/digest"},
+    "reason_code":{"type":"string","minLength":1,"maxLength":200},"idempotency_key":{"type":"string","minLength":16,"maxLength":200},
+    "request_fingerprint":{"$ref":"#/$defs/digest"},"created_at":{"type":"string","format":"date-time"}
+  },
+  "$defs":{"digest":{"type":"string","pattern":"^[a-f0-9]{64}$"}}
+}

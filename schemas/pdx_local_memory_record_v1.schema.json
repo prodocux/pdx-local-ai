@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://prodocux.dev/schemas/local-ai/pdx_local_memory_record_v1.schema.json",
+  "title": "PDX Local AI memory record v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "memory_id", "workspace_id", "principal_id", "memory_kind", "content", "content_sha256", "status", "confidence", "salience", "source_citation_id", "created_at", "updated_at"],
+  "properties": {
+    "schema_version": {"const": "pdx_local_memory_record_v1"},
+    "memory_id": {"type": "string", "format": "uuid"},
+    "workspace_id": {"type": "string", "format": "uuid"},
+    "principal_id": {"type": "string", "minLength": 1},
+    "memory_kind": {"enum": ["fact", "preference", "decision", "task", "note"]},
+    "content": {"type": "string", "minLength": 1},
+    "content_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "status": {"enum": ["active", "superseded", "retracted"]},
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+    "salience": {"type": "number", "minimum": 0, "maximum": 1},
+    "source_citation_id": {"type": "string", "format": "uuid"},
+    "supersedes_memory_id": {"type": ["string", "null"], "format": "uuid"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "updated_at": {"type": "string", "format": "date-time"}
+  }
+}
